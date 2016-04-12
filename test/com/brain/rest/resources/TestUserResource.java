@@ -13,14 +13,14 @@ import com.brain.rest.models.User;
 import com.brain.rest.service.UserService;
 import com.brain.rest.store.UserDataStore;
 import org.codehaus.jettison.json.JSONArray;
+import org.junit.Assert;
+import org.junit.Test;
 
-@Path("/testusers")
 public class TestUserResource {
 
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String test3(){
-        return "test works";
+    @Test
+    public void test(){
+        Assert.assertEquals(1,1);
     }
 
 }

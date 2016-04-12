@@ -49,7 +49,6 @@ CREATE TABLE IF NOT EXISTS "books" (
   userbookid text,
   name text,
   username text,
-  subtitle text,
   author text,
   publisher text,
   description text,

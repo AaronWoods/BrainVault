@@ -36,8 +36,8 @@ public class MovieService {
     public Response getMovies(String username){
         try{
             LinkedList<Movie> movies = data.getUserMovies(username);
-            GenericEntity<List<Movie>> entity = new GenericEntity<List<Movie>>(new LinkedList(movies)) {};
             if(movies != null){
+                GenericEntity<List<Movie>> entity = new GenericEntity<List<Movie>>(new LinkedList(movies)) {};
                 System.out.println("NOT NULL DATA ROWS");
                 return Response.ok(entity).status(200).build();
             }

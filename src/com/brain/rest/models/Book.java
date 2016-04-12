@@ -7,23 +7,24 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class Book extends Interest {
-    private String author, description, id, publisher, subtitle, thumbnailImg, userBookID;
+    private String author;
+    private String description;
+    private String id;
+    private String publisher;
+    private String thumbnailImg;
+    private String userBookID;
 
     public Book(){}
 
-    public Book(String name, String username, String userBookID){
-        super(name, username);
-        this.userBookID = userBookID;
-    }
-
-    public Book(String name, String username, String author, String description, String id, String publisher, String subtitle, String thumbnailImg) {
+    public Book(String userBookID, String name, String username,  String author, String publisher, String description, String thumbnailImg, String id) {
         super(name, username);
         this.author = author;
         this.description = description;
         this.id = id;
         this.publisher = publisher;
-        this.subtitle = subtitle;
         this.thumbnailImg = thumbnailImg;
+        this.id = id;
+        this.userBookID = userBookID;
     }
 
     public String getAuthor() {
@@ -50,16 +51,16 @@ public class Book extends Interest {
     public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
-    public String getSubtitle() {
-        return subtitle;
-    }
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
-    }
     public String getThumbnailImg() {
         return thumbnailImg;
     }
     public void setThumbnailImg(String thumbnailImg) {
         this.thumbnailImg = thumbnailImg;
+    }
+    public String getUserBookID() {
+        return userBookID;
+    }
+    public void setUserBookID(String userBookID) {
+        this.userBookID = userBookID;
     }
 }
