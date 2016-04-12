@@ -5,10 +5,7 @@ import java.sql.SQLException;
 
 import com.brain.rest.models.Password;
 import com.brain.rest.models.User;
-import com.brain.rest.utilities.ToJson;
 import com.brain.rest.utilities.SecurityHandler;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.codehaus.jettison.json.JSONArray;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
@@ -21,7 +18,7 @@ public class UserDataStore {
     private Cluster cluster;
     private Session session;
 
-    String table = "users";
+    private String table = "users";
 
     public UserDataStore() {
         cluster = Cluster.builder().addContactPoints("127.0.0.1").build();
@@ -70,7 +67,7 @@ public class UserDataStore {
             System.out.println("Found occurence of username");
             PreparedStatement ps = session.prepare("UPDATE "+table+" SET firstname = ?, lastname = ? WHERE username = ?;");
             BoundStatement bs = new BoundStatement(ps);
-            ResultSet rs = session.execute(bs.bind(user.getFname(), user.getLname(), user.getUsername()));
+            session.execute(bs.bind(user.getFname(), user.getLname(), user.getUsername()));
             close();
             return user;
         }
@@ -86,7 +83,7 @@ public class UserDataStore {
         if(r!=null){
             PreparedStatement ps = session.prepare("DELETE FROM "+table+" WHERE username = ?;");
             BoundStatement bs = new BoundStatement(ps);
-            ResultSet rs = session.execute(bs.bind(username));
+            session.execute(bs.bind(username));
             System.out.println(username + " removed");
             close();
             return true;
@@ -103,7 +100,7 @@ public class UserDataStore {
                 if(SecurityHandler.decrypt(r.getString("password")).equals(password.getPassword())){
                 PreparedStatement ps = session.prepare("UPDATE "+table+" SET password = ? WHERE username = ?;");
                 BoundStatement bs = new BoundStatement(ps);
-                ResultSet rs = session.execute(bs.bind(SecurityHandler.encrypt(password.getNewPassword()), username));
+                session.execute(bs.bind(SecurityHandler.encrypt(password.getNewPassword()), username));
                 System.out.println("Password updated");
                 close();
                 return true;
@@ -120,7 +117,7 @@ public class UserDataStore {
         }
     }
 
-    public Row checkUserPresence(String username){
+    private Row checkUserPresence(String username){
         PreparedStatement ps = session.prepare("SELECT * FROM users WHERE username = ?;");
         BoundStatement bs = new BoundStatement(ps);
         ResultSet rs = session.execute(bs.bind(username));
@@ -133,7 +130,7 @@ public class UserDataStore {
 
     public LinkedList<User> displayTableData() throws SQLException { //Visualise
         LinkedList<User> users = new LinkedList<>();
-        User user=null;
+        User user;
         String query = "SELECT * FROM "+table+";";
         ResultSet rs =session.execute(query);
         Row r = rs.one();
@@ -147,28 +144,9 @@ public class UserDataStore {
         return users;
     }
 
-    public JSONArray populateData() throws SQLException { //testing purposes, adding users
-
-        System.out.println("Attempting to add user");
-        PreparedStatement ps = session.prepare("INSERT INTO "+table+" (username,firstname,lastname,password) VALUES (?,?,?,?);");
-        BoundStatement boundStatement = new BoundStatement(ps);
-        ResultSet rs =session.execute(boundStatement.bind("woodsa22","Aaron","Woods","pass"));
-        ResultSet rs2 =session.execute(boundStatement.bind("gibbons4","Sean","Gibbons","pass"));
-        ResultSet rs3 =session.execute(boundStatement.bind("millisk5","Killian","Mills","pass"));
-        close();
-        System.out.println("Added test users");
-        return toJSON(rs);
-    }
-
-    public void close(){
+    private void close(){
         session.close();
         cluster.close();
     }
 
-    public JSONArray toJSON(ResultSet rs){
-        ToJson converter = new ToJson();
-        JSONArray json = new JSONArray();
-        json = converter.toJSONArray(rs);
-        return json;
-    }
 }

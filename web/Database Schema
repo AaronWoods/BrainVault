@@ -1,0 +1,79 @@
+API KEY = "AIzaSyDUI7oSKLoMHmmxQpr5HfFp1EFil30Bt7k"
+
+Create "brain" connection.
+
+Create CQL Database:
+
+CREATE KEYSPACE IF NOT EXISTS brainstore WITH replication = {
+  'class': 'SimpleStrategy',
+  'replication_factor': '1'
+};
+
+users table:
+
+USE brainstore;
+CREATE TABLE IF NOT EXISTS "users" (
+  username text,
+  firstname text,
+  lastname text,
+  password text,
+  PRIMARY KEY (username));
+
+movies table:
+
+USE brainstore;
+CREATE TABLE IF NOT EXISTS "movies" (
+  usermovieid text,
+  name text,
+  username text,
+  shortplot text,
+  year text,
+  genre text,
+  director text,
+  coverart text,
+  imdbrating text,
+  imdbid text,
+  PRIMARY KEY (usermovieid));
+
+USE brainstore;
+INSERT INTO movies(username,name,shortplot,usermovieid) VALUES ('woodsa22','The Avengers','Marvel super heroes','woodsa221');
+INSERT INTO movies(username,name,shortplot,usermovieid) VALUES ('woodsa22','This is the end','Funny end of world scenario','woodsa222');
+INSERT INTO movies(username,name,shortplot,usermovieid) VALUES ('woodsa22','Whiplash','Pro drummer','woodsa223');
+
+create index movies_username on movies (username);
+
+books table:
+
+USE brainstore;
+CREATE TABLE IF NOT EXISTS "books" (
+  userbookid text,
+  name text,
+  username text,
+  subtitle text,
+  author text,
+  publisher text,
+  description text,
+  thumbnail text,
+  id text,
+  PRIMARY KEY (userbookid));
+
+create index books_username on books (username);
+
+games table:
+
+USE brainstore;
+CREATE TABLE IF NOT EXISTS "games" (
+  usergameid text,
+  name text,
+  username text,
+  id text,
+  platform text,
+  overview text,
+  genre text,
+  boxarturl text,
+  publisher text,
+  developer text,
+  PRIMARY KEY (usergameid));
+
+  USE brainstore;
+  create index games_username on games (username);

@@ -11,7 +11,11 @@ import java.util.List;
 
 public class UserService {
 	
-	UserDataStore data = new UserDataStore();
+	private UserDataStore data = null;
+
+	public  UserService(){
+		data = new UserDataStore();
+	}
 
 	public Response userInfo(String username){
 		try{
